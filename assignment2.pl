@@ -11,14 +11,17 @@ connect(d,g,4).
 connect(e,g,2).
 connect(f,g,1).
 
-path(Start,End,Path) :-
-  path(Start, End, [Start], Path).
-path(End, End, RPath, Path) :-
+
+path(Start,End, Length, Path) :-
+  path(Start, End, Length, [Start], Path).
+path(End, End, Length, RPath, Path) :-
+pathLength(Path,Length),
   reverse(RPath, Path).
-path(Start,End,Visited,Path) :-
-  connect(Start,Next,Length),
+path(Start,End,Length, Visited,Path) :-
+  connect(Start,Next,Distance),
   \+ memberchk(Next,Visited),
-  path(Next,End,[Next|Visited], Path).
+  path(Next,End,Length,[Next|Visited], Path).
+  
   
 pathLength([_], 0).
 pathLength([Start, End | T], Length) :- connect(Start,End,L1), pathLength([End|T], L2), Length is L1 + L2.
